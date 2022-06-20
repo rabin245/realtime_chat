@@ -16,29 +16,46 @@
     <style>
         .scroll {
             max-height: 450px;
+            height: 450px;
             overflow-y: auto;
+        }
+
+        .hr-text {
+            position: relative;
+            border: none;
+            height: 1px;
+            background: rgb(230, 224, 224);
+            margin-bottom: 2rem;
+        }
+
+        .hr-text::before {
+            content: attr(data-content);
+            display: inline-block;
+            background: #fff;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #999;
+            ;
+            border-radius: 30rem;
+            padding: 0.2rem 1rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
 
-<body class="bg-dark">
-
-    <!-- Button trigger modal -->
-    <!-- <button type="button" class="btn btn-primary show-btn" data-toggle="modal" data-target="#usernameModal">
-        Launch demo modal
-    </button> -->
+<body style="background-color: rgb(217, 217, 217);">
     <!-- modal -->
     <div class="modal fade" id="usernameModal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="usernameModalTitle">Username:</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="username" class="form-control" id="username">
+                    <input type="text" name="username" class="form-control" id="username" autofocus>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -49,72 +66,28 @@
     </div>
 
 
-
+    <!-- body -->
     <div class="container p-4">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header bg-primary text-white p-2">
-                    <h4 class="card-title m-0">Chat App</h4>
+                <div class="card-header bg-primary text-white p-2 text-center">
+                    <h4 class="card-title m-0 font-weight">Chat App</h4>
                 </div>
-                <div class="card-body scroll">
-                    <div>
-                        <p class="p-2 ms-3 mb-1 rounded-pill" style="background-color: #f5f6f7;">Hi</p>
-                        <div class="small ms-3 text-muted d-flex justify-content-start">
-                            <span class="mr-1">
-                                <h6>User</h6>
-                            </span>
-                            23:58
-                        </div>
-                        <p class="p-2 ms-3 mb-1 rounded-pill" style="background-color: #f5f6f7;">How are you ...???
-                        </p>
-                        <div class="small ms-3 text-muted d-flex justify-content-start">
-                            <span class="mr-1">
-                                <h6>User</h6>
-                            </span>
-                            23:58
-                        </div>
-                        <p class="p-2 ms-3 mb-1 rounded-pill" style="background-color: #f5f6f7;">What are you doing
-                            tomorrow? Can we come up a bar?</p>
-                        <div class="small ms-3 text-muted d-flex justify-content-start">
-                            <span class="mr-1">
-                                <h6>User</h6>
-                            </span>
-                            23:58
-                        </div>
-                    </div>
-                    <div class="message-bubble">
-                        <p class="p-2 me-3 mb-1 text-white rounded-pill bg-primary">Hiii, I'm good.</p>
-                        <div class="small me-3 text-muted d-flex justify-content-end">00:06
-                            <span class="ml-1">
-                                <h6>You</h6>
-                            </span>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="p-2 me-3 mb-1 text-white rounded-pill bg-primary">How are you doing?</p>
-                        <div class="small me-3 text-muted d-flex justify-content-end">00:06
-                            <span class="ml-1">
-                                <h6>You</h6>
-                            </span>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="p-2 me-3 mb-1 text-white rounded-pill bg-primary">Long time no see! Tomorrow
-                            office. will
-                            be free on sunday.</p>
-                        <div class="small me-3 text-muted d-flex justify-content-end">00:06
-                            <span class="ml-1">
-                                <h6>You</h6>
-                            </span>
-                        </div>
-                    </div>
+                <div class="card-body scroll chat-messages">
+                    <!-- all chat messages -->
+
                 </div>
-                <div class="d-flex justify-content-start align-items-center py-1 px-2 rounded-pill">
-                    <input type="text" class="form-control rounded-pill" style="border-color: rgb(223, 219, 219);"
-                        placeholder="Type message">
-                    <span class="ml-2 text-primary" style="cursor: pointer;"><i class="fa fa-paper-plane fa-lg"
-                            aria-hidden="true"></i></span>
-                </div>
+
+                <form id="chat-form">
+                    <div class="d-flex justify-content-start align-items-center py-1 px-2 rounded-pill">
+                        <input type="text" class="form-control rounded-pill mr-1" id="chat-msg"
+                            style="border-color: rgb(223, 219, 219);" placeholder="Type message here"
+                            autocomplete="off">
+                        <button class="btn btn-link text-primary chat-send-btn" style="cursor: pointer;">
+                            <i class="fa fa-paper-plane fa-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -129,6 +102,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
+    <!-- socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
 
     <script src="main.js"></script>
 </body>
