@@ -4,7 +4,6 @@ const socketio = require("socket.io");
 const mongoose = require("mongoose");
 
 const {
-  Chat,
   getAllChatMessages,
   addChatMessage,
   convertDate,
@@ -15,6 +14,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 // connect to db
+
 mongoose
   .connect("mongodb://localhost:27047/realtime_chat", {
     useUnifiedTopology: true,
@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
   socket.on("setUsername", (username) => {
     // welcome user
     socket.emit("message", {
-      user: "server",
+      user: "welcome",
       message: "Welcome to the chat " + username,
     });
 

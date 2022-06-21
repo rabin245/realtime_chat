@@ -1,5 +1,5 @@
 const socket = io();
-let username = "user123";
+let username = "";
 const chatMsgSend = document.querySelector(".chat-send-btn");
 const chatMsgBody = document.querySelector(".chat-messages");
 
@@ -31,6 +31,10 @@ $("document").ready(function () {
 $("#save-username").click(function () {
   username = $("#username").val();
 
+  if (username === "") {
+    alert("Please enter a username");
+    return;
+  }
   $(".modal").modal("hide");
 
   socket.emit("setUsername", username);
@@ -51,31 +55,35 @@ function displayMessage(msgObj) {
   if (msgObj.user === "server") {
     // server msg
     chatMsgBody.innerHTML += `<hr data-content="${msgObj.message}" class="hr-text">`;
+  } else if (msgObj.user === "welcome") {
+    // welcome toast
+    document.querySelector(".toast-body").innerHTML = msgObj.message;
+    $(".toast").toast("show");
   } else {
     // users msg
     if (msgObj.user === username) {
       // own msg
       chatMsgBody.innerHTML += `
       <div class="message-bubble d-flex flex-column align-items-end">
-      <p class="p-2 me-3 mb-0 rounded-pill" style="background-color: #0088ff; color: white;">
-      ${msgObj.message}
-      </p>
-      <div class="small me-3 mb-2 text-muted d-flex justify-content-end">
-      ${msgObj.date} | You
+        <p class="p-2 me-3 mb-0 rounded-pill" style="background-color: #0088ff; color: white;">
+        ${msgObj.message}
+        </p>
+        <div class="small me-3 mb-2 text-muted d-flex justify-content-end">
+        ${msgObj.date} | You
+        </div>
       </div>
-  </div>
-  `;
+      `;
     } else {
       // other users msg
       chatMsgBody.innerHTML += `
       <div class="message-bubble d-flex flex-column align-items-start">
-      <p class="p-2 ms-3 mb-0 rounded-pill" style="background-color: #f5f6f7;">
-      ${msgObj.message}
-      </p>
-      <div class="small ms-3 mb-2 text-muted d-flex justify-content-start">
-          ${msgObj.user} | ${msgObj.date}
+        <p class="p-2 ms-3 mb-0 rounded-pill" style="background-color: #f5f6f7;">
+        ${msgObj.message}
+        </p>
+        <div class="small ms-3 mb-2 text-muted d-flex justify-content-start">
+            ${msgObj.user} | ${msgObj.date}
+        </div>
       </div>
-  </div>
       `;
     }
   }
