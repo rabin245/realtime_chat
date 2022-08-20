@@ -14,7 +14,10 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 // connect to db
-
+// mongoose
+//   .connect(
+//     "mongodb+srv://zaxiya:passwordtest@cluster0.tiuwgbw.mongodb.net/realtime_chat?retryWrites=true&w=majority"
+//   )
 mongoose
   .connect("mongodb://localhost:27047/realtime_chat", {
     useUnifiedTopology: true,
